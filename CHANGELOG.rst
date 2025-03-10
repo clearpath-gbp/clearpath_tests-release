@@ -2,6 +2,11 @@
 Changelog for package clearpath_tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.2.2 (2025-03-10)
+------------------
+* Add missing message dependencies
+* Contributors: Chris Iverach-Brereton
+
 0.2.1 (2025-03-07)
 ------------------
 * Fix simple_term_menu_vendor dependency
