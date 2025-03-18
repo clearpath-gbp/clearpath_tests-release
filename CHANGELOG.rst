@@ -2,6 +2,12 @@
 Changelog for package clearpath_tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.2.8 (2025-03-18)
+------------------
+* Use the last 7 bits for the CAN ID, sort the IDs in the final report
+* Note that the IDs are CANopen, and could be incorrect for other devices.
+* Contributors: Chris Iverach-Brereton
+
 0.2.7 (2025-03-18)
 ------------------
 * Move the confirmation about the lights being in the normal state before we call start()
