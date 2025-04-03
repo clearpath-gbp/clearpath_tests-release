@@ -48,11 +48,14 @@ from clearpath_tests import (
     diagnostic_test,
     drive_test,
     estop_test,
-    # blocked waiting for firmware changes -- fan_test,
+    fan_test,
     imu_test,
     light_test,
     mcu_test,
-    rotation_test,
+    # disabled for now as its accuracy isn't up to par and it
+    # frequently causes the motors to self-throttle on high-traction
+    # surfaces
+    # rotation_test,
     wifi_test,
 )
 from clearpath_tests.test_node import (
@@ -82,8 +85,12 @@ class TestingNode(Node):
         ]
 
         self.driving_tests = [
-            rotation_test.RotationTestNode(self.setup_path),
-            drive_test.DriveTestNode(self.setup_path),
+            # rotation_test.RotationTestNode(self.setup_path),
+            drive_test.DriveTestNode(
+                setup_path=self.setup_path,
+                default_speed_x=0.1,
+                direction='Forwards',
+            ),
         ]
 
         # Add any platform-specific tests here
@@ -91,9 +98,7 @@ class TestingNode(Node):
         if self.platform == Platform.A200:
             self.tests_for_platform.append(estop_test.EstopTestNode('Rear', self.setup_path))
         elif self.platform == Platform.A300:
-            # TODO
-            # temporarily disable the fans while some firmware changes are in-progress
-            # self.tests_for_platform.append(fan_test.FanTestNode(4, self.setup_path))
+            self.tests_for_platform.append(fan_test.FanTestNode(4, self.setup_path))
             self.tests_for_platform.append(light_test.LightTestNode(4, self.setup_path))
 
             self.tests_for_platform.append(estop_test.EstopTestNode('Front', self.setup_path))
@@ -128,6 +133,15 @@ class TestingNode(Node):
         ):
             self.tests_for_platform.append(light_test.LightTestNode(4, self.setup_path))
             self.tests_for_platform.append(canbus_test.CanbusTestNode('vcan0', 2, 4, self.setup_path))  # noqa: E501
+
+            self.driving_tests.append(
+                drive_test.DriveTestNode(
+                    setup_path=self.setup_path,
+                    default_speed_x=0.0,
+                    default_speed_y=0.1,
+                    direction='Left',
+                )
+            )
         elif self.platform == Platform.GENERIC:
             pass
         elif self.platform == Platform.J100:
@@ -140,6 +154,15 @@ class TestingNode(Node):
             self.tests_for_platform.append(estop_test.EstopTestNode('Front Right', self.setup_path))  # noqa: E501
             self.tests_for_platform.append(estop_test.EstopTestNode('Rear Left', self.setup_path))
             self.tests_for_platform.append(estop_test.EstopTestNode('Rear Right', self.setup_path))
+
+            self.driving_tests.append(
+                drive_test.DriveTestNode(
+                    setup_path=self.setup_path,
+                    default_speed_x=0.0,
+                    default_speed_y=0.1,
+                    direction='Left',
+                )
+            )
         elif self.platform == Platform.W200:
             self.tests_for_platform.append(light_test.LightTestNode(4))
             self.tests_for_platform.append(canbus_test.CanbusTestNode('can0', 4, 0, self.setup_path))  # noqa: E501
