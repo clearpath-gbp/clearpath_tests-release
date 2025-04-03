@@ -164,7 +164,7 @@ class McuTestNode(ClearpathTestNode):
 
         @return True if the handle exists, otherwise False
         """
-        return os.path.is_file(device)
+        return os.path.isfile(device) or os.path.islink(device)
 
     def check_serial_permissions(self, device):
         """
@@ -174,7 +174,7 @@ class McuTestNode(ClearpathTestNode):
 
         @return True if we have RW permissions, otherwise False
         """
-        exists = os.path.is_file(device)
+        exists = self.check_serial_exists(device)
         perms_ok = False
 
         if exists:
